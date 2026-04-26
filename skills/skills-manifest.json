@@ -1,0 +1,139 @@
+{
+  "version": "1.0.0",
+  "repository": "Agent-SkillHouse",
+  "skills": [
+    {
+      "id": "operating-standards",
+      "name": "Operating Standards",
+      "path": "foundation/operating-standards.md",
+      "category": "foundation",
+      "version": "1.0.0",
+      "description": "Core operating principles and execution discipline for all AI agent tasks",
+      "tags": ["foundation", "standards", "quality", "execution"],
+      "priority": "high",
+      "activation": "manual",
+      "dependencies": []
+    },
+    {
+      "id": "production-grade-development",
+      "name": "Production Grade Development",
+      "path": "code-generation/production-grade-development.md",
+      "category": "code-generation",
+      "version": "1.0.0",
+      "description": "Four-phase production code generation with TDD, security, and self-audit",
+      "tags": ["code-generation", "tdd", "security", "testing", "production"],
+      "priority": "high",
+      "activation": "manual",
+      "dependencies": ["operating-standards"]
+    },
+    {
+      "id": "full-project-scaffold",
+      "name": "Full Project Scaffold",
+      "path": "code-generation/full-project-scaffold.md",
+      "category": "code-generation",
+      "version": "1.0.0",
+      "description": "Dual-mode skill for building new projects (Mode A) or auditing existing code (Mode B)",
+      "tags": ["code-generation", "audit", "project-scaffold", "dual-mode", "comprehensive"],
+      "priority": "high",
+      "activation": "manual",
+      "dependencies": ["operating-standards"],
+      "modes": ["build", "audit"]
+    },
+    {
+      "id": "pre-commit-audit",
+      "name": "Pre-Commit Audit",
+      "path": "code-audit/pre-commit-audit.md",
+      "category": "code-audit",
+      "version": "1.0.0",
+      "description": "Final pre-commit security and quality gate before pushing to GitHub",
+      "tags": ["audit", "pre-commit", "security", "git-hygiene", "secrets-scan"],
+      "priority": "critical",
+      "activation": "manual",
+      "dependencies": ["operating-standards"],
+      "scope": "pre-commit"
+    },
+    {
+      "id": "production-audit",
+      "name": "Production Audit",
+      "path": "code-audit/production-audit.md",
+      "category": "code-audit",
+      "version": "1.0.0",
+      "description": "Comprehensive production codebase audit with severity grading (A/B/C/D)",
+      "tags": ["audit", "production", "comprehensive", "security", "quality"],
+      "priority": "high",
+      "activation": "manual",
+      "dependencies": ["operating-standards"],
+      "scope": "production"
+    },
+    {
+      "id": "static-analysis-debug",
+      "name": "Static Analysis Debug",
+      "path": "code-audit/static-analysis-debug.md",
+      "category": "code-audit",
+      "version": "1.0.0",
+      "description": "Root-cause bug diagnosis through exhaustive static code analysis",
+      "tags": ["audit", "debugging", "static-analysis", "root-cause", "production-bugs"],
+      "priority": "high",
+      "activation": "manual",
+      "dependencies": ["operating-standards"],
+      "analysis_type": "static"
+    },
+    {
+      "id": "image-enhancement",
+      "name": "Image Enhancement",
+      "path": "specialized/image-enhancement.md",
+      "category": "specialized",
+      "version": "1.0.0",
+      "description": "Professional camera simulation and photographic image enhancement with identity preservation",
+      "tags": ["image-processing", "photography", "camera-simulation", "enhancement", "specialized"],
+      "priority": "medium",
+      "activation": "manual",
+      "dependencies": [],
+      "camera_setup": {
+        "body": "Sony A1",
+        "lens": "85mm f/1.4",
+        "aperture": "f/1.6",
+        "iso": 100,
+        "shutter": "1/200s"
+      },
+      "output_resolution": "4K"
+    },
+    {
+      "id": "ui-ux-design",
+      "name": "UI/UX Design",
+      "path": "specialized/ui-ux-design.md",
+      "category": "specialized",
+      "version": "1.0.0",
+      "description": "Designer-grade UI/UX engineering for stunning, unique, production-ready interfaces",
+      "tags": ["ui", "ux", "design", "frontend", "components", "styling", "accessibility"],
+      "priority": "high",
+      "activation": "manual",
+      "dependencies": [],
+      "file_patterns": ["**/*.{jsx,tsx,vue,svelte,html,css,scss}"],
+      "design_principles": ["personality-driven", "visual-hierarchy", "motion-aware", "accessibility-first"],
+      "output_quality": "designer-grade"
+    }
+  ],
+  "categories": {
+    "foundation": {
+      "name": "Foundation",
+      "description": "Core operating principles and standards",
+      "skills": ["operating-standards"]
+    },
+    "code-generation": {
+      "name": "Code Generation",
+      "description": "Building new code and projects",
+      "skills": ["production-grade-development", "full-project-scaffold"]
+    },
+    "code-audit": {
+      "name": "Code Audit",
+      "description": "Reviewing and fixing existing code",
+      "skills": ["pre-commit-audit", "production-audit", "static-analysis-debug"]
+    },
+    "specialized": {
+      "name": "Specialized",
+      "description": "Domain-specific skills",
+      "skills": ["image-enhancement", "ui-ux-design"]
+    }
+  }
+}

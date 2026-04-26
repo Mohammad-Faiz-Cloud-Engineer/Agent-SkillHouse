@@ -1,0 +1,104 @@
+---
+name: Image Enhancement
+version: 1.0.0
+description: Professional camera simulation and photographic image enhancement with identity preservation
+author: Mohammad Faiz
+tags:
+  - image-processing
+  - photography
+  - camera-simulation
+  - enhancement
+  - specialized
+category: specialized
+activation: manual
+priority: medium
+camera_setup:
+  body: Sony A1
+  lens: 85mm f/1.4
+  aperture: f/1.6
+  iso: 100
+  shutter: 1/200s
+output_resolution: 4K
+---
+
+# Image Enhancement
+
+## Absolute Constraints — DO NOT VIOLATE THESE UNDER ANY CIRCUMSTANCES
+
+### Identity:
+- Preserve the subject's exact facial geometry, bone structure, and proportions
+- Do not alter expression, face shape, eye spacing, nose shape, or jawline
+- Subtle blemish cleanup is permitted. Nothing that changes who they are.
+
+Background:
+- The background must be pixel-faithful to the reference image
+- No replacements, additions, removals, or compositional shifts
+- No reinterpretation. Exact duplication of the original environment.
+
+───────────────────────────────────────────────────────────────────────────────
+CAMERA SIMULATION
+
+Simulate this specific setup:
+  Body:     Sony A1 (full-frame, 50MP sensor)
+  Lens:     85mm f/1.4
+  Aperture: f/1.6
+  ISO:      100
+  Shutter:  1/200s
+
+Depth of field:
+  - Subject's face in tack-sharp focus
+  - Shallow, smooth bokeh falloff behind the subject
+  - Natural lens rendering — not digitally faked blur
+
+Sensor character:
+  - Clean, low-noise full-frame rendering
+  - High resolution with natural micro-detail, not sharpening artifacts
+
+───────────────────────────────────────────────────────────────────────────────
+LIGHTING
+
+Direction and angle: match the reference exactly — do not reposition the key light
+
+Enhancements allowed within that matched direction:
+  - Increase light quality: softer, more directional, subject-focused
+  - Highlights: warm, smooth, no clipping
+  - Shadows: cool-toned, gradual falloff, no crush, no flat fill
+  - Contrast: lifted — not crushed blacks, not blown whites
+  - Micro-contrast: increase local detail separation in skin and fabric
+  - Gradations: smooth transitions between lit and shadow zones
+
+What this lighting must NOT do:
+  - No harsh shadows or hard-edged light
+  - No runway or fashion-editorial overlit look
+  - No fake rim light or artificial glow added to the subject
+
+───────────────────────────────────────────────────────────────────────────────
+COLOR & TONE
+
+  - Color profile: neutral editorial — not warm, not cool, not stylized
+  - Contrast curve: lifted midtones, controlled highlights, open shadows
+  - Saturation: natural — no desaturation, no oversaturation
+  - Skin tones: accurate, warm where the light hits, neutral in shadow
+
+───────────────────────────────────────────────────────────────────────────────
+SKIN RENDERING
+
+  - Real pore-level texture must be visible
+  - No smoothing, no airbrushing, no plastic-skin processing
+  - Natural subsurface scattering where light penetrates skin
+  - Subtle film grain is acceptable — adds realism, not noise
+
+───────────────────────────────────────────────────────────────────────────────
+OUTPUT
+
+  - Resolution: 4K
+  - Crop: portrait framing matching the reference
+  - Style: editorial realism — not beauty retouching, not fashion fantasy
+
+───────────────────────────────────────────────────────────────────────────────
+PRIORITY ORDER (if any instructions conflict)
+
+  1. Identity preservation — never compromise
+  2. Background fidelity — never compromise
+  3. Lighting direction match — then enhance within that constraint
+  4. All other enhancements follow

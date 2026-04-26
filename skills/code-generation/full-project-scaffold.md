@@ -1,0 +1,490 @@
+---
+name: Full Project Scaffold
+version: 1.0.0
+description: Dual-mode skill for building new projects (Mode A) or auditing existing code (Mode B)
+author: Mohammad Faiz
+tags:
+  - code-generation
+  - audit
+  - project-scaffold
+  - dual-mode
+  - comprehensive
+category: code-generation
+activation: manual
+priority: high
+dependencies:
+  - operating-standards
+modes:
+  - build
+  - audit
+---
+
+# Full Project Scaffold
+
+## Purpose
+
+Prepend this to any coding request. It handles two modes:
+
+  **MODE A — BUILD**: Writing new code from scratch or adding new features.
+  **MODE B — AUDIT**: Reviewing, debugging, or fixing existing code.
+
+Detect the mode from the request. If unclear, ask before proceeding.
+
+Scale depth to complexity in both modes:
+  Simple (utility fn, script):  Skip ADR and threat model.
+  Medium (module, service):     Full analysis minus ADR.
+  Complex (system, API, auth):  All phases in full. No shortcuts.
+
+If the request is ambiguous: list your assumptions explicitly and get
+confirmation before Phase 1. Do not proceed on a guess.
+
+═══════════════════════════════════════════════════════════════════════════════
+MODE A — BUILD NEW CODE
+═══════════════════════════════════════════════════════════════════════════════
+
+PHASE A1 — ANALYSIS (no code written here)
+───────────────────────────────────────────
+
+① SCOPE CONTRACT
+   - Exact inputs, transformations, outputs — no ambiguity
+   - Explicit IN-SCOPE and OUT-OF-SCOPE boundaries
+   - All assumptions stated up front
+
+② INTERFACE DEFINITION
+   - Full function signatures with types before implementation
+   - API contract: request shape, response shape, error shape
+   - Consistent error format across all outputs
+
+③ EDGE CASE INVENTORY
+   Before writing a line of code, document:
+   - Empty / null / undefined for every parameter
+   - Boundary values: MIN, MAX, just-inside, just-outside
+   - Malformed or unexpected types
+   - Concurrent access scenarios (if state is shared)
+   - Partial failure scenarios (if multiple operations involved)
+
+④ ARCHITECTURE DECISION (complex tasks only)
+   - Pattern chosen and one alternative rejected — explain why
+   - Module structure and data flow
+
+⑤ THREAT MODEL (any task with external input, auth, DB, or file access)
+   - Attack surface: every input point, external call, user-facing surface
+   - Trust boundaries: what is untrusted until explicitly validated
+   - Mitigation per threat: specific control, not generic statement
+
+──────────────────────────────────────────────────────────────────────────────
+
+PHASE A2 — TESTS (write before implementation)
+───────────────────────────────────────────────
+
+Use a real framework. No placeholders, no pseudo-code, no "TODO: add test."
+  JS/TS: Jest or Vitest  |  Python: Pytest  |  Go: testing  |  Java: JUnit
+
+Match the naming convention of the existing codebase if one exists.
+Otherwise:
+  Jest/Vitest: describe('[unit]') + it('[condition] → [expected]')
+  Pytest:      test_[unit]_[condition]_[expected]
+
+Unit tests:
+  - Happy path: normal input produces expected output
+  - Null/empty/undefined for every parameter
+  - Boundary values: MIN, MAX, just-above, just-below
+  - Type mismatches and malformed input
+  - Special characters, encoding edge cases
+
+Integration tests (if multiple modules or external calls):
+  - Correct data flow between layers
+  - DB: read, write, transaction rollback
+  - External API: success + failure + timeout
+  - File system: ENOENT, EACCES, missing files
+
+Security tests (if external input, auth, or DB access):
+  - Injection: SQL, NoSQL, command, LDAP — real payloads
+  - XSS: <script>, javascript:, onerror= in all text inputs
+  - Path traversal: ../../../etc/passwd patterns
+  - Oversized input: huge strings, deep nesting, large arrays
+  - Auth bypass: missing token, expired token, wrong issuer
+  - Mass assignment: extra fields that shouldn't be accepted
+  - SSRF: user-supplied URLs targeting internal endpoints
+
+Concurrency tests (if shared state or parallel operations):
+  - Simultaneous writes to same resource
+  - Connection pool exhaustion
+
+──────────────────────────────────────────────────────────────────────────────
+
+PHASE A3 — IMPLEMENTATION
+──────────────────────────
+
+Write only code that makes the tests pass. Nothing more.
+
+CODE STRUCTURE
+  - Function max: 40 lines (including braces and whitespace)
+  - Nesting max: 3 levels (if/else/for/while/try)
+  - Single responsibility: one reason to change per function
+  - Constants, types, helpers extracted at module level
+
+NAMING
+  - Variables: what it IS (user not u, requestTimestamp not ts)
+  - Functions: verb + noun (validateUserInput, fetchOrderById)
+  - Booleans: is/has/should/can prefix
+  - Constants: SCREAMING_SNAKE_CASE, full description
+    (MAX_RETRY_COUNT not MAX, DEFAULT_TIMEOUT_MS not TIMEOUT)
+  - Zero magic numbers or strings — every literal named
+
+CODE HYGIENE
+  - No commented-out code. Delete it.
+  - No unused imports, variables, or unreachable paths
+  - No debug output in production: console.log, print(), debugger,
+    dd(), var_dump(), fmt.Println() — remove all
+    Exception: structured logger calls (logger.info, log.Error) are fine
+  - No emojis in source or inline comments
+  - Comments explain WHY. Code explains WHAT.
+
+TYPE SAFETY (typed languages)
+  - No implicit any — all params and returns explicit
+  - Narrow unknown types with guards, not blind casts
+  - Strict mode on
+  - No prototype pollution: don't merge user-supplied keys onto objects
+
+SECURITY
+  Secrets:
+  - Zero hardcoded API keys, tokens, passwords, certs, credentials
+  - All secrets via env vars or secrets manager
+  - Config validated on startup — fail fast on missing required vars
+  - No secrets in logs, error messages, or client responses
+
+  Input:
+  - Validate type, format, length, range, charset at every entry point
+  - Reject malformed input early — don't coerce it
+  - Sanitize: escape output, parameterize queries, encode URLs
+  - Prototype pollution check: validate keys on any external object merge
+
+  Database:
+  - Parameterized queries only — no concatenation, no interpolation
+  - ORM built-in methods only — no raw queries with user input
+  - Multi-step writes in transactions, rollback on failure
+  - Minimum required DB permissions
+
+  Web/API:
+  - HTTPS only — no insecure fallback
+  - Auth: verify signature, expiry, issuer — not just token presence
+  - CORS: explicit allowlist, never wildcard in production
+  - Cookies: httpOnly, Secure, SameSite=Strict
+  - Rate limiting on auth endpoints and expensive operations
+  - SSRF: user-supplied URLs validated against allowlist before fetch
+  - Output encoding is context-specific: HTML, JS, URL, SQL differ
+
+  Error handling:
+  - Never expose stack traces, internal paths, or DB schema to clients
+  - Log full context server-side (correlation ID, safe parameters)
+  - Generic message to client, specific detail to logs
+  - Default deny — fail closed, not open
+
+PERFORMANCE & RELIABILITY
+  - No blocking sync I/O in async contexts
+  - All promises awaited or caught — no floating promises
+  - Timeouts on every external call
+  - Retry with exponential backoff — never hammer a failing service
+  - All opened resources closed: connections, handles, sockets, streams
+  - Event listeners added and removed in pairs — or use once()
+  - Timers cleared on cleanup/unmount
+  - No N+1 queries — batch or eager load
+  - No new dependency without explicit justification and CVE check
+
+──────────────────────────────────────────────────────────────────────────────
+
+PHASE A4 — SELF-AUDIT
+──────────────────────
+
+Verify your own output before delivering. Mark PASS, FAIL, or N/A.
+Note the reason for any FAIL.
+
+STRUCTURE
+[ ] No function exceeds 40 lines
+[ ] No nesting exceeds 3 levels
+[ ] No magic numbers or strings — all named constants
+[ ] No dead code, unused imports, unreachable paths
+[ ] No debug output in production paths
+
+SECURITY
+[ ] Zero hardcoded secrets
+[ ] All inputs validated at entry point
+[ ] All external calls have error handling and timeout
+[ ] No sensitive data in logs or error responses
+[ ] DB queries parameterized — no string interpolation
+[ ] Auth tokens: signature, expiry, and issuer all verified
+[ ] SSRF: user URLs not fetched without allowlist check
+[ ] CORS and cookies configured securely
+
+RELIABILITY
+[ ] All async paths covered by try/catch or .catch()
+[ ] All resources closed in finally blocks or cleanup functions
+[ ] Shared state race conditions identified and addressed
+[ ] Non-critical failures degrade gracefully
+
+TESTS
+[ ] All tests real and runnable — no placeholders
+[ ] Every edge case from Phase A1 has a test
+[ ] Security payloads tested where applicable
+
+TYPES (typed languages)
+[ ] No implicit any
+[ ] All params and returns explicitly typed
+[ ] Unknown types narrowed with guards
+
+──────────────────────────────────────────────────────────────────────────────
+
+OUTPUT FORMAT — MODE A
+───────────────────────
+
+## 1. ANALYSIS
+[Scope, interface, edge cases, architecture if complex, threat model if relevant]
+
+## 2. TEST SUITE
+[Complete runnable tests — include framework and setup command]
+
+## 3. IMPLEMENTATION
+[Full source files. No partial snippets.]
+
+## 4. SELF-AUDIT
+| Item                        | Status | Notes |
+|-----------------------------|--------|-------|
+| No functions >40 lines      | PASS   |       |
+| No hardcoded secrets        | PASS   |       |
+| All inputs validated        | PASS   |       |
+| ...                         |        |       |
+
+## 5. USAGE EXAMPLE
+[Only for public APIs, exported modules, or non-obvious interfaces.
+ Skip for internal helpers and self-documenting code.]
+
+═══════════════════════════════════════════════════════════════════════════════
+MODE B — AUDIT EXISTING CODE
+═══════════════════════════════════════════════════════════════════════════════
+
+PHASE B1 — INVENTORY
+──────────────────────
+
+1. Print full file tree.
+2. Categorize each file:
+   source | config | test | asset | generated | secret | duplicate | dead
+3. Flag for deletion before auditing:
+   - Secrets:    .env*, *.pem, *.key, *.cert, credentials.json, adminsdk*.json
+   - Generated:  node_modules/, dist/, build/, .next/, __pycache__/, target/
+   - Temp:       *.log, *.tmp, .cache/, coverage/, .nyc_output/
+   - OS/IDE:     .DS_Store, .idea/, .vscode/settings.json (personal)
+   - Dead:       *.bak, *.orig, *_old.*, scratch.*, TODO.txt
+4. Audit order: core logic → data layer → API → utilities → UI → config → tests
+5. If codebase is large (>20 files), state your batch plan before starting.
+
+──────────────────────────────────────────────────────────────────────────────
+
+PHASE B2 — CHECKLISTS (every file, no exceptions)
+───────────────────────────────────────────────────
+
+🔴 SECURITY
+  □ Hardcoded secrets: API keys, tokens, passwords, certs in source
+  □ Injection: SQL/NoSQL/Command built via string concatenation
+  □ Input validation: type, length, range, format at every entry point
+  □ Output encoding: context-specific (HTML, JS, URL, SQL)
+  □ XSS: innerHTML, dangerouslySetInnerHTML, eval(), document.write()
+  □ Auth gaps: routes missing authentication or authorization
+  □ IDOR: object references without ownership verification
+  □ JWT: algorithm not pinned, expiry not enforced, signature not verified
+  □ Password: plaintext storage, appearing in logs or API responses
+  □ Session: no invalidation on logout, no rotation on privilege change
+  □ CORS: wildcard origin with credentials
+  □ CSRF: state-changing endpoints without token or SameSite
+  □ Cookies: missing httpOnly, Secure, SameSite=Strict
+  □ Info leakage: stack traces, internal paths, schema sent to client
+  □ PII/tokens in logs
+  □ Path traversal: file ops using user-supplied paths
+  □ File upload: no MIME check, no size limit, executables accepted
+  □ Rate limiting: auth endpoints and expensive ops unprotected
+  □ ReDoS: user-input regex with catastrophic backtracking potential
+  □ SSRF: user-supplied URLs fetched without allowlist check
+  □ Prototype pollution: user-supplied keys merged onto objects
+  □ Dependency CVEs: flag known-vulnerable packages
+
+🔴 BUGS & LOGIC
+  □ Wrong operators, inverted logic, == vs ===, precedence issues
+  □ Off-by-one: loop bounds, array access, pagination
+  □ Missing break/return causing fall-through
+  □ Short-circuit skipping intended side effects
+  □ Truthy/falsy traps: 0, "", false, NaN hitting wrong branch
+  □ Null/undefined access before guard
+  □ Wrong this binding, arrow vs regular function mismatch
+  □ Variable shadowing, stale closures, temporal dead zone
+  □ Shared object/array mutation via reference
+  □ Unawaited promises, floating async calls
+  □ Race conditions on shared state
+  □ Event listener accumulation, timer leaks
+  □ Recursion without depth limit or base case
+  □ Type coercion producing wrong result
+  □ JSON edge cases: circular refs, undefined, NaN, Infinity
+
+🟠 PERFORMANCE
+  □ N+1 queries — DB call inside a loop
+  □ Missing indexes on filtered/sorted/joined columns
+  □ Redundant computation in loops — memoize or hoist
+  □ Blocking sync I/O in async context
+  □ Memory leaks: unclosed connections, unremoved listeners
+  □ No connection pooling — clients created per request
+  □ Unbounded queries — no LIMIT
+  □ Bundle bloat — unused imports in production build
+
+🟠 ERROR HANDLING
+  □ I/O, network, DB, or external calls without try/catch
+  □ Empty catch blocks — silent failures
+  □ Vague error messages with no actionable detail
+  □ Unhandled promise rejections
+  □ No fallback for external service failure
+  □ Missing timeouts on network/DB calls
+  □ Resources not closed in finally blocks
+
+🟡 CODE QUALITY
+  □ Dead code: unused imports, vars, functions, commented blocks — delete
+  □ Duplication — extract to shared utility
+  □ Magic values — named constants
+  □ Functions >40 lines or nesting >3 levels — extract
+  □ Misleading names — fix
+  □ Mixed patterns (async styles, module systems) — unify
+  □ Debug output in production: console.log, debugger, print() — remove
+  □ Emojis in source or comments — remove
+  □ TypeScript: unjustified any, missing types
+
+🟡 API LAYER
+  □ Wrong status codes: 200 for errors, 500 for client mistakes
+  □ Missing request validation before processing
+  □ List endpoints with no pagination
+  □ Inconsistent response shape across endpoints
+
+🟡 DATA LAYER
+  □ Queries using string interpolation or concatenation
+  □ Multi-step writes not wrapped atomically
+  □ Connections not returned to pool or explicitly closed
+
+🟡 CONFIG & ENVIRONMENT
+  □ Required env vars not validated on startup
+  □ Debug mode or verbose logging in production config
+  □ Same config value defined in multiple files
+  □ .env.example missing or out of sync with actual .env keys
+
+🟡 ARCHITECTURE
+  □ UI, business logic, and data access mixed in same file
+  □ Circular imports
+  □ Deep relative paths (../../../) — misplaced files
+  □ Constants or utilities not imported from shared location
+
+──────────────────────────────────────────────────────────────────────────────
+
+PHASE B3 — FIX & VERIFY
+─────────────────────────
+
+- Surgical fixes only. Don't refactor what isn't broken.
+- Fix root cause, not symptoms. No patches over broken logic.
+- State every assumption before acting on it.
+- Verify no regression in adjacent logic.
+- Never introduce a new dependency without justification.
+- No placeholders. Every fix must be complete.
+
+──────────────────────────────────────────────────────────────────────────────
+
+OUTPUT FORMAT — MODE B
+───────────────────────
+
+For files with issues:
+
+  FILE: path/to/file.ext
+  ──────────────────────────────────────────
+  ISSUE #N | Severity | Category
+  Location: Line X / function name
+  Problem:  [Exact issue and why it's wrong]
+  Impact:   [What breaks or what risk this creates]
+  Fix:      [What was changed and why]
+  ──────────────────────────────────────────
+  FIXED FILE: [complete corrected file — no snippets]
+
+For clean files:
+
+  FILE: path/to/file.ext — CLEAN
+  Checks passed: Security ✓ Bugs ✓ Performance ✓ Quality ✓ [etc.]
+
+For deleted files:
+
+  FILE: path/to/file.ext — DELETED
+  Category: [Secret / Generated / Dead / Duplicate]
+  Reason:   [Specific justification]
+  Action:   [Added to .gitignore / Removed from tracking]
+
+──────────────────────────────────────────────────────────────────────────────
+
+FINAL AUDIT REPORT — MODE B
+─────────────────────────────
+
+SUMMARY
+  Files audited:              XXX
+  Files deleted:              XXX
+  Total issues found:         XXX
+  Issues fixed:               XXX
+  Issues requiring decision:  XXX
+
+SEVERITY BREAKDOWN
+┌──────────────────┬─────────┬─────────┬─────────┬─────────┐
+│ Category         │ 🔴 Crit │ 🟠 High │ 🟡 Med  │ 🟢 Low  │
+├──────────────────┼─────────┼─────────┼─────────┼─────────┤
+│ Security         │         │         │         │         │
+│ Bugs / Logic     │         │         │         │         │
+│ Performance      │         │         │         │         │
+│ Error Handling   │         │         │         │         │
+│ Code Quality     │         │         │         │         │
+│ API Layer        │         │         │         │         │
+│ Data Layer       │         │         │         │         │
+│ Config / Env     │         │         │         │         │
+│ Architecture     │         │         │         │         │
+└──────────────────┴─────────┴─────────┴─────────┴─────────┘
+
+REQUIRES HUMAN DECISION
+  Issue:   [Specific problem]
+  File:    [Location]
+  Why:     [Technical or business reason needing judgment]
+  Options: [A] [B] [C]
+
+BLOCKERS TO GRADE A
+  [Only if grade isn't A — list exactly what remains]
+
+FINAL GRADE: [A / B / C / D]
+  A = Zero critical/high issues. Production-ready.
+  B = Zero critical. Minor high issues remain. Review before deploy.
+  C = Criticals fixed. High/medium remain. Not production-ready.
+  D = Critical issues unresolved. Do not deploy.
+
+═══════════════════════════════════════════════════════════════════════════════
+NON-NEGOTIABLE RULES (both modes)
+═══════════════════════════════════════════════════════════════════════════════
+
+1.  Detect the mode from the request. If unclear, ask before proceeding.
+2.  State assumptions explicitly before acting on them.
+3.  No file skipped. No partial output. No snippets.
+4.  Fix root causes, not symptoms.
+5.  Don't touch working code. Only fix confirmed issues.
+6.  Follow existing patterns unless the pattern itself is the bug.
+7.  No new dependencies without explicit justification.
+8.  Comments explain WHY. Code explains WHAT.
+9.  No debug output in any production code path.
+10. No placeholder implementations or TODO fixes.
+11. If codebase is too large for one pass, state a batching plan in
+    Phase B1 and execute it consistently.
+12. For Mode B: you are doing static analysis. Do not claim to have run
+    or executed code. Reason only from code as written.
+
+═══════════════════════════════════════════════════════════════════════════════
+CONFLICT RESOLUTION (both modes)
+═══════════════════════════════════════════════════════════════════════════════
+
+If a user request conflicts with these standards:
+1. Apply the standards by default.
+2. State the conflict explicitly.
+3. Offer a compliant alternative that achieves the same goal.
+4. Deviate only if the user explicitly overrides and acknowledges the risk.
