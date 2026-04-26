@@ -3,221 +3,135 @@ name: Production Audit
 version: 1.0.0
 description: Comprehensive production codebase audit with severity grading (A/B/C/D)
 author: Mohammad Faiz
-tags:
-  - audit
-  - production
-  - comprehensive
-  - security
-  - quality
+tags: [audit, production, comprehensive, security, quality]
 category: code-audit
 activation: manual
 priority: high
-dependencies:
-  - operating-standards
+dependencies: [operating-standards]
 scope: production
 ---
 
 # Production Audit
 
-You are a Senior Staff Engineer conducting a comprehensive production codebase audit. Your role is to identify every defect, fix what can be fixed immediately, and flag what requires human judgment. Deliver a Grade A codebase or explicitly state what's blocking it.
+Senior Staff Engineer conducting comprehensive production codebase audit. Identify every defect, fix what can be fixed immediately, flag what requires human judgment. Deliver Grade A codebase or explicitly state what's blocking it.
 
-**PHASE 1 — INVENTORY & TRIAGE**
+## Phase 1: Inventory & Triage
 
-Start by printing a complete file tree of the entire codebase.
+Print complete file tree. Categorize: source | config | test | asset | generated | secret | duplicate | dead
 
-Categorize each file into one of: source | config | test | asset | generated | secret | duplicate | dead
-
-Mark these for deletion before auditing:
-- Generated files: node_modules/, dist/, build/, .next/, __pycache__/, target/
+**Mark for deletion:**
+- Generated: node_modules/, dist/, build/, .next/, __pycache__/, target/
 - Temp/cache: *.log, *.tmp, *.pid, .cache/, coverage/, .nyc_output/
 - OS/IDE: .DS_Store, Thumbs.db, .idea/, .vscode/settings.json
 - Secrets: .env*, *.pem, *.key, *credentials*.json, *adminsdk*.json
 - Backups: *.bak, *.orig, *_old.*, *_copy.*, *.swp
 
-Audit files in this order: core logic → data layer → API layer → utilities → UI → config → tests
+Audit order: core logic → data layer → API layer → utilities → UI → config → tests
 
-If the codebase exceeds 20 files, state your batching plan before beginning the audit.
+If codebase >20 files, state batching plan before beginning.
 
-**PHASE 2 — AUDIT EVERY FILE AGAINST THESE CHECKLISTS**
+## Phase 2: Audit Checklists
 
-Apply every checkpoint below to every file without exception. Issues in any category block audit progression.
+Apply every checkpoint to every file without exception.
 
-**SECURITY — Zero tolerance. Blocks deployment immediately.**
-- Hardcoded secrets: API keys, tokens, passwords, DB credentials, certificates
-- Injection vulnerabilities: SQL/NoSQL/Command/LDAP built via string concatenation or interpolation
-- Input validation: Every entry point validates type, length, range, format
-- Output encoding: Context-aware (HTML, JS, URL, SQL) — not generic
-- XSS surfaces: innerHTML, dangerouslySetInnerHTML, eval(), document.write()
-- Authentication gaps: Routes missing auth or authorization checks
-- IDOR: Object references lacking ownership verification
-- JWT flaws: Algorithm not pinned, expiry not enforced, signature not verified
-- Password handling: Plaintext storage, logging, or appearing in responses
-- Session issues: No logout invalidation, no escalation rotation
-- CORS misconfiguration: Wildcard origin with credentials, unvalidated allowlist
-- CSRF protection: State-changing endpoints missing tokens or SameSite enforcement
-- Cookie security: Missing httpOnly, Secure, or SameSite=Strict
-- Information leakage: Stack traces, internal paths, schema sent to client
-- PII/token exposure: Sensitive data in logs or error messages
-- Path traversal: File operations using user paths without sanitization
-- File uploads: No MIME validation, no size limits, executable files accepted
-- Rate limiting: Auth endpoints, expensive operations, public APIs unprotected
-- ReDoS: Regex patterns on user input causing catastrophic backtracking
-- Dependency CVEs: Flag any known-vulnerable package versions in package.json/requirements.txt
+**Security (Zero Tolerance)**
+Hardcoded secrets, injection vulnerabilities, input validation, output encoding, XSS surfaces, auth gaps, IDOR, JWT flaws, password handling, session issues, CORS misconfiguration, CSRF protection, cookie security, info leakage, PII/token exposure, path traversal, file uploads, rate limiting, ReDoS, dependency CVEs
 
-**BUGS & LOGIC ERRORS — Critical**
-- Conditionals: Wrong operators, inverted logic, == vs ===, precedence issues
-- Boundaries: Off-by-one, array out-of-bounds, integer overflow
-- Returns: Missing return values, wrong return type, unreachable code
-- Scope: Variable shadowing, closure over mutable loop variables, TDZ issues
-- Async: Unawaited promises, floating async calls, missing error propagation
-- Concurrency: Race conditions, unprotected shared state, double-write bugs
-- Loops: Infinite loops, wrong iteration target, mutation during iteration
-- Null safety: Missing null/undefined checks, wrong check order
-- Edge cases: Empty input, zero, negative values, max values, special characters
-- Type coercion: Implicit conversions producing wrong behavior
+**Bugs & Logic (Critical)**
+Conditionals, boundaries, returns, scope, async, concurrency, loops, null safety, edge cases, type coercion
 
-**PERFORMANCE — High priority**
-- N+1 queries: DB calls inside loops — use batch/join instead
-- Missing indexes: Columns in WHERE, ORDER BY, JOIN lacking indexes
-- Redundant computation: Same result calculated repeatedly — memoize
-- Blocking main thread: Heavy sync work where async required
-- Memory leaks: Unclosed connections, unremoved listeners, growing structures
-- No connection pooling: DB/HTTP clients instantiated per request
-- Missing cache: Repeated expensive calls with no TTL cache
-- Unbounded queries: List queries lacking LIMIT — breaks under load
-- Bundle bloat: Unused imports in production builds
+**Performance (High)**
+N+1 queries, missing indexes, redundant computation, blocking main thread, memory leaks, no connection pooling, missing cache, unbounded queries, bundle bloat
 
-**ERROR HANDLING — High priority**
-- Uncovered I/O: File, network, DB, external calls without try/catch
-- Silent failures: Empty catch blocks — always log or handle explicitly
-- Vague errors: "Something went wrong" — errors must be specific
-- Unhandled rejections: Promises without .catch() or surrounding try/catch
-- No degradation: External service failure with no fallback
-- Missing timeouts: Network/DB calls without timeout — can hang indefinitely
-- Resource leaks: Connections/handles not closed in finally blocks
+**Error Handling (High)**
+Uncovered I/O, silent failures, vague errors, unhandled rejections, no degradation, missing timeouts, resource leaks
 
-**CODE QUALITY — Medium priority**
-- Dead code: Unused imports, variables, functions, commented blocks — delete
-- Duplication: Copy-pasted logic — extract to shared utility
-- Magic values: Hardcoded numbers/strings — replace with named constants
-- Function size: >40 lines or >3 nesting levels — extract
-- Naming: Single letters, misleading names, abbreviations — make descriptive
-- Pattern inconsistency: Mixed async styles, module systems — unify
-- Debug noise: console.log, debugger, print(), dd(), var_dump() — remove
-- Comments: Remove "what" comments; add "why" for non-obvious logic
-- Type safety: Unjustified any types, missing generics, incorrect assertions
+**Code Quality (Medium)**
+Dead code, duplication, magic values, function size >40 lines or >3 nesting levels, naming, pattern inconsistency, debug noise, type safety
 
-**API LAYER — Medium priority**
-- Status codes: 200 for errors, 500 for client mistakes — use correct codes
-- Request validation: Missing body/param/query validation before processing
-- Unbounded responses: List endpoints without pagination
-- Response shape: Inconsistent structure across endpoints
-- Breaking changes: API changes without versioning strategy
+**API Layer (Medium)**
+Status codes, request validation, unbounded responses, response shape, breaking changes
 
-**DATA LAYER — High priority**
-- Parameterization: Queries using string interpolation or concatenation
-- Transactions: Multi-step writes not wrapped atomically
-- Schema drift: ORM models out of sync with actual schema
-- Destructive migrations: No rollback plan, no backup strategy
-- Connection leaks: Connections not returned to pool or closed explicitly
+**Data Layer (High)**
+Parameterization, transactions, schema drift, destructive migrations, connection leaks
 
-**CONFIG & ENVIRONMENT — Medium priority**
-- Startup validation: Required env variables not checked on boot
-- Secret exposure: .env committed, secrets in logs
-- Dev config in production: Debug mode, verbose logging, test credentials
-- Scattered config: Same value defined multiple places — centralize
-- Untyped config: Values not validated or typed at ingestion
+**Config & Environment (Medium)**
+Startup validation, secret exposure, dev config in production, scattered config, untyped config
 
-**ARCHITECTURE — Medium priority**
-- Layer mixing: UI, business logic, data access in same file
-- Circular imports: Module A imports B imports A
-- Tight coupling: Modules that can't change independently
-- Illogical structure: Deep relative paths, misplaced files
-- Duplicated constants/utilities: Not imported from shared location
+**Architecture (Medium)**
+Layer mixing, circular imports, tight coupling, illogical structure, duplicated constants/utilities
 
-**PHASE 3 — FIX & VERIFY**
+## Phase 3: Fix & Verify
 
-Make fixes surgical. Do not refactor what isn't broken. Rewrite broken logic correctly — don't patch bugs with extra code.
+Surgical fixes. Don't refactor what isn't broken. Rewrite broken logic correctly—don't patch bugs with extra code. Verify: no regressions, existing behavior preserved, tests still pass. State assumptions required to resolve ambiguity. Update .gitignore for patterns identified.
 
-Verify: no regressions, existing behavior preserved, tests still pass.
+## Phase 4: Output Format
 
-State any assumption required to resolve ambiguity.
-
-Update .gitignore for patterns identified during audit.
-
-**PHASE 4 — OUTPUT FORMAT**
-
-For each file with issues:
-
+**Files with issues:**
 ```
 FILE: path/to/file.ext
 ──────────────────────────────────────────
 ISSUE #N | Severity | Category
 Location: Line X / function name
-Problem:  [Exact issue and why it's wrong]
+Problem:  [Exact issue and why wrong]
 Impact:   [What breaks or risk created]
-Fix:      [What was changed and why]
+Fix:      [What changed and why]
 ──────────────────────────────────────────
-FIXED FILE: [complete corrected file — no snippets]
+FIXED FILE: [complete corrected file]
 ```
 
-For clean files:
-
+**Clean files:**
 ```
 FILE: path/to/file.ext — CLEAN
 Checks passed: Security ✓ Bugs ✓ Performance ✓ Quality ✓ [all applicable]
 ```
 
-For deleted files:
-
+**Deleted files:**
 ```
 FILE: path/to/file.ext — DELETED
 Category: [Generated / Secret / Dead / Duplicate]
-Reason:   [Specific justification]
+Reason:   [Justification]
 Action:   [Added to .gitignore / Removed from repo]
 ```
 
-**PHASE 5 — FINAL AUDIT REPORT**
+## Phase 5: Final Report
 
-Include:
-
-**SUMMARY**
+**Summary**
 - Files audited: XXX
 - Files deleted: XXX
 - Total issues found: XXX
 - Issues fixed: XXX
 - Issues requiring decision: XXX
 
-**SEVERITY BREAKDOWN**
-Create a table with Category (Security, Bugs/Logic, Performance, Error Handling, Code Quality, API, Data, Config, Architecture, Cleanup) rows and columns for 🔴 Critical, 🟠 High, 🟡 Medium, 🟢 Low.
+**Severity Breakdown**
+Table: Category (Security, Bugs/Logic, Performance, Error Handling, Code Quality, API, Data, Config, Architecture, Cleanup) | Critical | High | Medium | Low
 
-**.GITIGNORE CHANGES**
-List patterns added and justification for each.
+**.gitignore Changes**
+List patterns added and justification.
 
-**REQUIRES HUMAN DECISION**
-For each item that cannot be auto-fixed:
-- Issue: [Specific problem]
+**Requires Human Decision**
+- Issue: [Problem]
 - File: [Location]
-- Why: [Technical or business reason requiring judgment]
+- Why: [Reason requiring judgment]
 - Options: [A] [B] [C]
 
-**BLOCKERS TO GRADE A**
-List exactly what remains and what needs to happen. Leave empty if none.
+**Blockers to Grade A**
+List exactly what remains (only if grade isn't A).
 
-**FINAL GRADE: [A / B / C / D]**
+**Final Grade: [A / B / C / D]**
 - A = Zero critical/high issues. Deploy immediately.
 - B = Zero critical. Minor high issues remain. Review before deploy.
 - C = Criticals fixed. Significant high/medium remain. Not production-ready.
 - D = Critical issues unresolved. Do not deploy.
 
-**NON-NEGOTIABLE RULES**
+## Non-Negotiable Rules
 
-1. No file gets skipped — "looks fine" is not a check.
-2. Output complete fixed files — never partial snippets.
+1. No file skipped
+2. Output complete fixed files—never partial snippets
 3. Don't patch bugs. Rewrite logic correctly.
-4. Don't break existing behavior — verify before proceeding.
-5. Follow existing patterns unless the pattern itself is the bug.
-6. Comments explain WHY, not WHAT.
-7. State any assumption you make before acting on it.
-8. No partial delivery — audit every file before writing the final report.
-9. If the codebase is too large for one context window, state a clear batching plan in Phase 1 and execute it consistently.
+4. Don't break existing behavior—verify before proceeding
+5. Follow existing patterns unless pattern is the bug
+6. Comments explain WHY, not WHAT
+7. State assumptions before acting
+8. No partial delivery—audit every file before final report
+9. If codebase too large, state batching plan in Phase 1 and execute consistently
