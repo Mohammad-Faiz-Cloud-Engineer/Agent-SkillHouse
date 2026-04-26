@@ -158,6 +158,20 @@ Bug categories:
 
 ---
 
+**code-review.md** — Structured code review with severity levels
+
+Production-grade code review providing clear, actionable feedback. Every comment includes file location, issue description, and specific fix. Uses severity system (CRITICAL, HIGH, MEDIUM, LOW, QUESTION).
+
+Features:
+- Structured comment format
+- Comprehensive checklists (security, correctness, performance, quality)
+- Multiple review modes (standard, security, performance, quick)
+- Special handling for security issues and large PRs
+
+**When to use:** Reviewing pull requests or conducting code reviews.
+
+---
+
 ### Specialized
 
 **image-enhancement.md** — Professional camera simulation and image enhancement
