@@ -40,6 +40,19 @@
       "modes": ["build", "audit"]
     },
     {
+      "id": "commit-message-generator",
+      "name": "Commit Message Generator",
+      "path": "code-generation/commit-message-generator.md",
+      "category": "code-generation",
+      "version": "1.0.0",
+      "description": "Professional commit message generation following Conventional Commits with context-aware formatting",
+      "tags": ["git", "commit", "conventional-commits", "version-control"],
+      "priority": "medium",
+      "activation": "manual",
+      "dependencies": [],
+      "commit_format": "conventional-commits"
+    },
+    {
       "id": "pre-commit-audit",
       "name": "Pre-Commit Audit",
       "path": "code-audit/pre-commit-audit.md",
@@ -79,6 +92,19 @@
       "analysis_type": "static"
     },
     {
+      "id": "code-review",
+      "name": "Code Review",
+      "path": "code-audit/code-review.md",
+      "category": "code-audit",
+      "version": "1.0.0",
+      "description": "Production-grade code review with actionable feedback and severity classification",
+      "tags": ["code-review", "pull-request", "feedback", "quality-assurance"],
+      "priority": "high",
+      "activation": "manual",
+      "dependencies": ["operating-standards"],
+      "review_types": ["security", "logic", "performance", "style"]
+    },
+    {
       "id": "image-enhancement",
       "name": "Image Enhancement",
       "path": "specialized/image-enhancement.md",
@@ -112,6 +138,20 @@
       "file_patterns": ["**/*.{jsx,tsx,vue,svelte,html,css,scss}"],
       "design_principles": ["personality-driven", "visual-hierarchy", "motion-aware", "accessibility-first"],
       "output_quality": "designer-grade"
+    },
+    {
+      "id": "efficient-communication",
+      "name": "Efficient Communication",
+      "path": "specialized/efficient-communication.md",
+      "category": "specialized",
+      "version": "1.0.0",
+      "description": "Token-efficient communication mode that reduces verbosity by 60-80% while maintaining technical accuracy",
+      "tags": ["communication", "efficiency", "token-optimization", "brevity"],
+      "priority": "medium",
+      "activation": "manual",
+      "dependencies": [],
+      "compression_levels": ["minimal", "standard", "maximum"],
+      "token_reduction": "60-80%"
     }
   ],
   "categories": {
@@ -123,17 +163,17 @@
     "code-generation": {
       "name": "Code Generation",
       "description": "Building new code and projects",
-      "skills": ["production-grade-development", "full-project-scaffold"]
+      "skills": ["production-grade-development", "full-project-scaffold", "commit-message-generator"]
     },
     "code-audit": {
       "name": "Code Audit",
       "description": "Reviewing and fixing existing code",
-      "skills": ["pre-commit-audit", "production-audit", "static-analysis-debug"]
+      "skills": ["pre-commit-audit", "production-audit", "static-analysis-debug", "code-review"]
     },
     "specialized": {
       "name": "Specialized",
       "description": "Domain-specific skills",
-      "skills": ["image-enhancement", "ui-ux-design"]
+      "skills": ["image-enhancement", "ui-ux-design", "efficient-communication"]
     }
   }
 }
