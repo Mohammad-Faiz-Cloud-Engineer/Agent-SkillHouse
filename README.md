@@ -217,7 +217,7 @@ Compression levels:
 
 ## How to Use Skills
 
-### For Kiro AI
+### For AI Agents [Method-1]
 
 Reference skills directly in your prompt:
 
@@ -228,7 +228,7 @@ Reference skills directly in your prompt:
 Task: Build a REST API for user authentication with JWT tokens
 ```
 
-### For Other AI Agents
+### For AI Agents [Method-2]
 
 Copy the skill content (including YAML frontmatter) into your prompt:
 
