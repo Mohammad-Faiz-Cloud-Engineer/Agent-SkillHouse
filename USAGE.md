@@ -321,7 +321,32 @@ Requirements:
 - TypeScript
 ```
 
-### Workflow 6: UI/UX Design
+### Workflow 6: Code Review
+
+```
+#skills/foundation/operating-standards.md
+#skills/code-audit/code-review.md
+
+Task: Review this pull request for security and quality issues
+Context:
+- PR adds user authentication with JWT
+- 5 files changed, 300 lines added
+- Focus on security vulnerabilities
+```
+
+### Workflow 7: Write Commit Message
+
+```
+#skills/code-generation/commit-message-generator.md
+
+Task: Generate commit message for these staged changes
+Context:
+- Added JWT authentication to API
+- Updated user model with new fields
+- Fixed race condition in login handler
+```
+
+### Workflow 8: UI/UX Design
 
 ```
 #skills/specialized/ui-ux-design.md
@@ -434,11 +459,14 @@ Task: Comprehensive audit focusing on security and performance
 | operating-standards | Foundation | Every task (load first) |
 | production-grade-development | Code Gen | Building new features/modules |
 | full-project-scaffold | Code Gen | Starting new projects or full audits |
+| commit-message-generator | Code Gen | Writing commit messages |
 | pre-commit-audit | Audit | Before pushing to GitHub |
 | production-audit | Audit | Reviewing production code |
 | static-analysis-debug | Audit | Finding bugs through code analysis |
+| code-review | Audit | Reviewing pull requests and code changes |
 | image-enhancement | Specialized | AI image processing tasks |
 | ui-ux-design | Specialized | Building designer-grade interfaces |
+| efficient-communication | Specialized | Token-efficient responses |
 
 ---
 

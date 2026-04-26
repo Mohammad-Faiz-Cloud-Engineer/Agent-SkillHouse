@@ -56,15 +56,18 @@ Task: Comprehensive audit of production codebase
 ### Code Generation
 - `production-grade-development.md` — TDD + security + self-audit
 - `full-project-scaffold.md` — Build (Mode A) or Audit (Mode B)
+- `commit-message-generator.md` — Conventional Commits messages
 
 ### Code Audit
 - `pre-commit-audit.md` — Pre-GitHub security gate
 - `production-audit.md` — Comprehensive audit (A/B/C/D grade)
 - `static-analysis-debug.md` — Root-cause bug analysis
+- `code-review.md` — Production-grade PR reviews
 
 ### Specialized
 - `image-enhancement.md` — Camera simulation + enhancement
 - `ui-ux-design.md` — Designer-grade UI/UX engineering
+- `efficient-communication.md` — Token-efficient responses
 
 ---
 
@@ -77,9 +80,12 @@ Task: Comprehensive audit of production codebase
 | Fix bugs | `operating-standards` + `static-analysis-debug` |
 | Pre-commit check | `operating-standards` + `pre-commit-audit` |
 | Production review | `operating-standards` + `production-audit` |
+| Code review | `operating-standards` + `code-review` |
 | Audit existing code | `operating-standards` + `full-project-scaffold` (Mode B) |
+| Write commit message | `commit-message-generator` |
 | Image processing | `image-enhancement` |
 | UI/UX design | `ui-ux-design` |
+| Token optimization | `efficient-communication` |
 
 ---
 
@@ -90,11 +96,14 @@ Task: Comprehensive audit of production codebase
 | operating-standards | High | None | — |
 | production-grade-development | High | operating-standards | — |
 | full-project-scaffold | High | operating-standards | Build, Audit |
+| commit-message-generator | Medium | None | — |
 | pre-commit-audit | Critical | operating-standards | — |
 | production-audit | High | operating-standards | — |
 | static-analysis-debug | High | operating-standards | — |
+| code-review | High | operating-standards | security, logic, performance, style |
 | image-enhancement | Medium | None | — |
 | ui-ux-design | High | None | — |
+| efficient-communication | Medium | None | minimal, standard, maximum |
 
 ---
 

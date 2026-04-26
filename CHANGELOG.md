@@ -16,15 +16,18 @@ All notable changes to Agent-SkillHouse.
 **Code Generation**
 - `production-grade-development.md` - Four-phase TDD with security and self-audit
 - `full-project-scaffold.md` - Dual-mode (Build/Audit) project scaffolding
+- `commit-message-generator.md` - Professional commit message generation following Conventional Commits
 
 **Code Audit**
 - `pre-commit-audit.md` - Pre-GitHub security and quality gate
 - `production-audit.md` - Comprehensive production audit with A/B/C/D grading
 - `static-analysis-debug.md` - Root-cause bug diagnosis through static analysis
+- `code-review.md` - Production-grade code review with actionable feedback
 
 **Specialized**
 - `image-enhancement.md` - Professional camera simulation and image enhancement
 - `ui-ux-design.md` - Designer-grade UI/UX engineering for production interfaces
+- `efficient-communication.md` - Token-efficient communication with 60-80% reduction
 
 #### Documentation
 - `README.md` - Repository overview and skills catalog
@@ -85,7 +88,7 @@ All notable changes to Agent-SkillHouse.
 ## Version History
 
 ### 1.0.0 (2026)
-- Initial release with 8 core skills
+- Initial release with 11 core skills
 - Complete documentation suite
 - Skills manifest and metadata system
 - Organized repository structure

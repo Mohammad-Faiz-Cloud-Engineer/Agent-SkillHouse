@@ -43,7 +43,8 @@ Each skill includes:
     │   └── static-analysis-debug.md
     ├── specialized/                # Domain-specific skills
     │   ├── image-enhancement.md
-    │   └── ui-ux-design.md
+    │   ├── ui-ux-design.md
+    │   └── efficient-communication.md
     └── skills-manifest.json        # Machine-readable catalog
 ```
 
@@ -93,6 +94,21 @@ Modes:
 - Mode B: Audit existing code with severity grading
 
 **When to use:** Starting new projects or conducting full codebase reviews.
+
+---
+
+**commit-message-generator.md** — Professional commit messages following Conventional Commits
+
+Analyzes code changes and generates properly formatted commit messages. Follows Conventional Commits specification with context-aware detail levels. Determines when body and footers are needed.
+
+Features:
+- Conventional Commits format (type, scope, description)
+- Context-aware body inclusion
+- Breaking change documentation
+- Issue reference formatting
+- Project convention detection
+
+**When to use:** Writing commit messages for version control.
 
 ---
 
@@ -169,6 +185,19 @@ Design principles:
 - Accessibility-first approach
 
 **When to use:** Building user interfaces that need to look professionally designed.
+
+---
+
+**efficient-communication.md** — Token-efficient communication mode
+
+Reduces response verbosity by 60-80% while maintaining complete technical accuracy. Three compression levels (minimal, standard, maximum) for different scenarios. Preserves code quality and never compresses security warnings.
+
+Compression levels:
+- Minimal: 60% reduction, professional tone
+- Standard: 70% reduction, technical brevity
+- Maximum: 80% reduction, ultra-terse
+
+**When to use:** Working within token limits, cost optimization, or rapid information exchange.
 
 ---
 
@@ -317,10 +346,10 @@ dependencies:
 
 ## Statistics
 
-- Total skills: 8
+- Total skills: 11
 - Categories: 4
 - Documentation pages: 5
-- Total lines: 6000+
+- Total lines: 8000+
 
 ---
 
